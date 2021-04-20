@@ -27,9 +27,10 @@ import java.util.Map;
  * 1. 풀이 과정
  *  1) 기준 문자열을 트리 구조로 정렬, 탐색 문자열에 대해 존재하는 경우 확인 -> 시간 초과
  *  2) 같은 문자열을 탐색하는 경우 제외 -> 실패
+ *  3) 탐색 문자열과 기준 문자열이 완전히 일치해야하도록 수정 -> 실패
  * 
  * 2. 풀이 결과
- *  소요시간: 1시간 02분 (11:00 ~ 12:02) 
+ *  소요시간: 1시간 16분 (11:00 ~ 12:16) 
  *  결과: 실패
  *  
  * 3. 문제 해결
@@ -127,6 +128,6 @@ public class Main {
             currentNode = currentNode.getChildren().get(ch);
         }
         
-        return 1;
+        return currentNode.getChildren().isEmpty()? 1: 0;
     }
 }
