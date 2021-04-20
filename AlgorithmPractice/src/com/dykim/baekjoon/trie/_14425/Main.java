@@ -34,8 +34,12 @@ import java.util.Map;
  *  결과: 실패
  *  
  * 3. 문제 해결
+ *  정석 트라이 구조 구현을 위해 노드 클래스를 구현하고, HashMap으로 트리 구조 구현
+ *  기준 문자열을 저장한 뒤, 대상 문자열을 탐색함.
  *   
  * 4. 개선할 점
+ *  StringBuilder 의 length 는 동적으로 할당되기 때문에, 입력된 문자열의 크기보다 클 수 있다.(동적으로 길이가 조절되기 때문에 capacity 라는 개념이 존재함.)
+ *  따라서 정확한 문자열의 길이를 재기 위해선 불변 클래스인 String 객체의 length 를 기준으로 잡아야한다.
  *  
  * @term 2021.04.20 ~ 2021.04.21
  */
@@ -43,6 +47,7 @@ public class Main {
     static class Node {
         private Node parents;
         private Map<Character, Node> children;
+        private boolean last;
         
         private Node() {
         }
@@ -58,6 +63,14 @@ public class Main {
         
         public Map<Character, Node> getChildren() {
             return children;
+        }
+        
+        public boolean isLast() {
+            return last;
+        }
+        
+        public void setLast(boolean last) {
+            this.last = last;
         }
         
         public void resetChildren() {
@@ -78,17 +91,11 @@ public class Main {
         for(int i=0; i<n; i++) {
             addNode(br.readLine());
         }
-
-        // 검색할 문자열 중복 제거
-        Map<String, Boolean> deDup = new HashMap<>();
-        for(int i=0; i<m; i++) {
-            deDup.put(br.readLine(), true);
-        }
         
         // 검색
         int result = 0;
-        for (String key: deDup.keySet()) {
-            result += findStr(key);
+        for (int i=0; i<m; i++) {
+            result += findStr(br.readLine());
         }
         
         System.out.println(result);
@@ -107,9 +114,12 @@ public class Main {
                 currentNode.getChildren().put(ch, new Node(currentNode, new HashMap<>()));
             }
             
-            // 다음 트리로 이동
+            // 다음 노드로 이동
             currentNode = currentNode.getChildren().get(ch);
         });
+        
+        // 마지막 문자 표시
+        currentNode.setLast(true);
     }
     
     // 문자열 탐색
@@ -118,16 +128,15 @@ public class Main {
         
         // root 노드부터 시작
         currentNode = root;
-        for(int i=0; i<sb.length(); i++) {
+        for(int i=0; i<str.length(); i++) {
             Character ch = sb.charAt(i);
             
             if (!currentNode.getChildren().containsKey(ch)) {
                 return 0;
             }
-            
             currentNode = currentNode.getChildren().get(ch);
         }
         
-        return currentNode.getChildren().isEmpty()? 1: 0;
+        return currentNode.isLast()? 1: 0;
     }
 }
