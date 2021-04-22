@@ -1,10 +1,8 @@
 package com.dykim.baekjoon.dfs._4963;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 
 /**
  * 문제
@@ -43,27 +41,23 @@ import java.io.OutputStreamWriter;
  * @term 2021.04.22
  */
 public class Main {
-    private static final int W = 0;
-    private static final int H = 1;
-    
     private static int[][] map;
     private static boolean[][] visit;
-    
-    private static int[] dr = {1, 1, 1, -1, -1, -1, 0, 0};
-    private static int[] dc = {1, 0, -1, 1, 0, 1, 1, -1};
+    private static int w;
+    private static int h;
     
     public static void main(String[] args) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         
         while(true) {
             String[] wh = br.readLine().split(" ");
-            if ("0".equals(wh[W])) {
+            w = Integer.parseInt(wh[0]);
+            h = Integer.parseInt(wh[1]);
+            
+            if (w==0 && h==0) {
                 break;
             }
             
-            int w = Integer.parseInt(wh[W]);
-            int h = Integer.parseInt(wh[H]);
             map = new int[h][w];
             visit = new boolean[h][w];
             
@@ -78,35 +72,34 @@ public class Main {
             
             // 섬 갯수 카운트
             int count = 0;
-            for (int row=0; row<h; row++) {
-                for(int col=0; col<w; col++) {
-                    
-                    if (map[row][col]==1 && !visit[row][col]) {
-                        dfs(row, col);
+            for (int x=0; x<h; x++) {
+                for(int y=0; y<w; y++) {
+                    if (map[x][y]==1 && !visit[x][y]) {
+                        dfs(x, y);
                         count++;
                     }
                 }
             }
             
-            bw.write(""+count);
-            bw.newLine();
+            System.out.println(count);
         }
-        
-        bw.close();
     }
     
-    private static void dfs(int row, int col) {
-        visit[row][col] = true;
+    private static void dfs(int x, int y) {
+        int[] dx = {1, 1, 1, -1, -1, -1, 0, 0};
+        int[] dy = {1, 0, -1, 1, 0, 1, 1, -1};
+        
+        visit[x][y] = true;
         
         // 8방향 탐색
         for (int i=0; i<8; i++) {
-            int mr = row + dr[i];
-            int mc = col + dc[i];
+            int mx = x + dx[i];
+            int my = y + dy[i];
             
             // 인덱스 범위 & 방문하지 않은 곳 & 땅
-            if ((0 <=mr && mr < map.length) && (0<= mc && mc < map[0].length)) {
-                if (map[mr][mc]==1 && !visit[mr][mc]) {
-                    dfs(mr, mc);
+            if ((0 <=mx && mx < h) && (0<= my && my < w)) {
+                if (map[mx][my]==1 && !visit[mx][my]) {
+                    dfs(mx, my);
                 }
             }
         }

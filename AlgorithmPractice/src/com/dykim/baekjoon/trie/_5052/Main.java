@@ -104,7 +104,6 @@ public class Main {
     }
     
     private static boolean trie(String str) {
-        StringBuilder sb = new StringBuilder(str);
         Node currentNode = root;
         
         for (int i=0; i< str.length(); i++) {
@@ -117,7 +116,7 @@ public class Main {
                 currentNode.createChildren();
             }
             
-            int indx = sb.charAt(i) - 48;
+            int indx = str.charAt(i) - 48;
             
             // 탐색하지 않은 경우
             if (currentNode.getChildren()[indx]==null) {
