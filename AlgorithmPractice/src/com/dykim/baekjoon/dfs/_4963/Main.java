@@ -35,12 +35,19 @@ import java.io.InputStreamReader;
  *  결과: 실패
  *  
  * 3. 문제 해결
+ *  맵의 모든 점을 방문하면서 섬인 지역을 dfs로 탐색, 독립된 섬 갯수를 구한다.
+ *  8방향으로 확인하며, 넓이/높이가 y,x 에 대응되는 점을 주의한다.
  *   
  * 4. 개선할 점
+ *  이동 방향 좌표를 설정할 때, 실수로 같은 방향을 두번 넣어서 계속 틀렸다...
+ *  이런 실수를 하지 않도록 간격을 맞추고 검토를 확실히 하자.
  *  
- * @term 2021.04.22
+ * @term 2021.04.22 ~ 2021.04.23
  */
 public class Main {
+    private static final int W = 0;
+    private static final int H = 1;
+    
     private static int[][] map;
     private static boolean[][] visit;
     private static int w;
@@ -51,13 +58,12 @@ public class Main {
         
         while(true) {
             String[] wh = br.readLine().split(" ");
-            w = Integer.parseInt(wh[0]);
-            h = Integer.parseInt(wh[1]);
-            
-            if (w==0 && h==0) {
+            if ("0".equals(wh[W])) {
                 break;
             }
             
+            w = Integer.parseInt(wh[W]);
+            h = Integer.parseInt(wh[H]);
             map = new int[h][w];
             visit = new boolean[h][w];
             
@@ -86,8 +92,8 @@ public class Main {
     }
     
     private static void dfs(int x, int y) {
-        int[] dx = {1, 1, 1, -1, -1, -1, 0, 0};
-        int[] dy = {1, 0, -1, 1, 0, 1, 1, -1};
+        int[] dx = {1, 1,  1, -1, -1, -1, 0,  0};
+        int[] dy = {1, 0, -1,  1,  0, -1, 1, -1};
         
         visit[x][y] = true;
         
