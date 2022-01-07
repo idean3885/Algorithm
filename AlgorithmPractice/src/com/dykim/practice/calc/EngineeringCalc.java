@@ -34,8 +34,12 @@ public class EngineeringCalc {
             opers.add(parsedExp[i]);
         }
 
-        var calcNum = calc();
-        printCalc(calcNum);
+        try{
+            var calcNum = calc();
+            printCalc(calcNum);
+        } catch (ArithmeticException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private static void calcMulDiv() {
@@ -58,6 +62,10 @@ public class EngineeringCalc {
                 }
             }
             else if ("/".equals(oper)) {
+                if (nextNum == 0.0) {
+                    throw new ArithmeticException("0으로 나눌 수 없습니다.");
+                }
+
                 if (isTmp) {
                     tmpCalc /= nextNum;
                 } else {
