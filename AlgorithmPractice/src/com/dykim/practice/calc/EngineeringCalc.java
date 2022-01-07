@@ -16,22 +16,20 @@ import java.util.Scanner;
  */
 public class EngineeringCalc {
 
-    private static ArrayList<Double> numbers;
-    private static ArrayList<String> opers;
+    private static ArrayList<Double> numbers = new ArrayList<>();
+    private static ArrayList<String> operations = new ArrayList<>();
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
         var parsedExp = sc.nextLine().split(" ");
-        numbers = new ArrayList();
-        opers = new ArrayList();
 
         for (var i = 0; i<parsedExp.length; i+=2) {
             numbers.add(Double.parseDouble(parsedExp[i]));
         }
 
         for (var i=1; i< parsedExp.length; i+=2) {
-            opers.add(parsedExp[i]);
+            operations.add(parsedExp[i]);
         }
 
         try{
@@ -49,8 +47,8 @@ public class EngineeringCalc {
         var tmpCalc = 1.0;
         var isTmp = false;
 
-        for (var i = 0; i < opers.size(); i++) {
-            var oper = opers.get(i);
+        for (var i = 0; i < operations.size(); i++) {
+            var oper = operations.get(i);
             var curNum = numbers.get(i);
             var nextNum = numbers.get(i + 1);
             if ("*".equals(oper)) {
@@ -85,7 +83,7 @@ public class EngineeringCalc {
         calcNumbers.add(isTmp? tmpCalc : numbers.get(numbers.size() - 1));
 
         numbers = calcNumbers;
-        opers = calcOpers;
+        operations = calcOpers;
     }
 
     private static double calc() {
@@ -94,8 +92,8 @@ public class EngineeringCalc {
 
         // 더하기 빼기 계산
         var calcNum = numbers.get(0);
-        for (var i = 0; i<opers.size(); i++) {
-            var oper = opers.get(i);
+        for (var i = 0; i<operations.size(); i++) {
+            var oper = operations.get(i);
             var nextNum = numbers.get(i+1);
             if ("+".equals(oper)) calcNum += nextNum;
             if ("-".equals(oper)) calcNum -= nextNum;
