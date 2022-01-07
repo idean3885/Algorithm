@@ -16,22 +16,22 @@ import java.util.Scanner;
  */
 public class EngineeringCalc {
 
-    private static Double[] numbers;
-    private static String[] opers;
+    private static ArrayList<Double> numbers;
+    private static ArrayList<String> opers;
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
         var parsedExp = sc.nextLine().split(" ");
-        numbers = new Double[parsedExp.length/2 + 1];
-        opers = new String[parsedExp.length/2];
+        numbers = new ArrayList();
+        opers = new ArrayList();
 
         for (var i = 0; i<parsedExp.length; i+=2) {
-            numbers[i/2] = Double.parseDouble(parsedExp[i]);
+            numbers.add(Double.parseDouble(parsedExp[i]));
         }
 
         for (var i=1; i< parsedExp.length; i+=2) {
-            opers[i/2] = parsedExp[i];
+            opers.add(parsedExp[i]);
         }
 
         var calcNum = calc();
@@ -45,26 +45,28 @@ public class EngineeringCalc {
         var tmpCalc = 1.0;
         var isTmp = false;
 
-        for (var i = 0; i < opers.length; i++) {
-            var oper = opers[i];
+        for (var i = 0; i < opers.size(); i++) {
+            var oper = opers.get(i);
+            var curNum = numbers.get(i);
+            var nextNum = numbers.get(i + 1);
             if ("*".equals(oper)) {
                 if (isTmp) {
-                    tmpCalc *= numbers[i+1];
+                    tmpCalc *= nextNum;
                 } else {
-                    tmpCalc = numbers[i] * numbers[i+1];
+                    tmpCalc = curNum * nextNum;
                     isTmp = true;
                 }
             }
             else if ("/".equals(oper)) {
                 if (isTmp) {
-                    tmpCalc /= numbers[i+1];
+                    tmpCalc /= nextNum;
                 } else {
-                    tmpCalc = numbers[i] / numbers[i+1];
+                    tmpCalc = curNum / nextNum;
                     isTmp = true;
                 }
             }
             else {
-                calcNumbers.add(isTmp ? tmpCalc : numbers[i]);
+                calcNumbers.add(isTmp ? tmpCalc : curNum);
                 calcOpers.add(oper);
                 tmpCalc = 1;
                 isTmp = false;
@@ -72,10 +74,10 @@ public class EngineeringCalc {
         }
 
         // 마지막 값 넣기
-        calcNumbers.add(isTmp? tmpCalc : numbers[numbers.length-1]);
+        calcNumbers.add(isTmp? tmpCalc : numbers.get(numbers.size() - 1));
 
-        numbers = calcNumbers.toArray(Double[]::new);
-        opers = calcOpers.toArray(String[]::new);
+        numbers = calcNumbers;
+        opers = calcOpers;
     }
 
     private static double calc() {
@@ -83,11 +85,12 @@ public class EngineeringCalc {
         calcMulDiv();
 
         // 더하기 빼기 계산
-        var calcNum = numbers[0];
-        for (var i = 0; i<opers.length; i++) {
-            var oper = opers[i];
-            if ("+".equals(oper)) calcNum += numbers[i+1];
-            if ("-".equals(oper)) calcNum -= numbers[i+1];
+        var calcNum = numbers.get(0);
+        for (var i = 0; i<opers.size(); i++) {
+            var oper = opers.get(i);
+            var nextNum = numbers.get(i+1);
+            if ("+".equals(oper)) calcNum += nextNum;
+            if ("-".equals(oper)) calcNum -= nextNum;
         }
 
         return calcNum;
