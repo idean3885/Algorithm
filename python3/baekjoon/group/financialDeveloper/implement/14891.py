@@ -1,6 +1,6 @@
 import math
 
-# 풀이기록
+# 풀이기록 1차 단순 재귀 완탐 기준
 # 1. 문자열 입력을 받지 못해 시간 초과
 # 2. 본인 위치 방문처리를 잘못하여 실패
 # 3. 바퀴번호를 인덱스로 착각하여 문제를 틀림
@@ -31,7 +31,7 @@ def exp(idx, dir):
             visit[idx] = True
             exp(idx-1, dir * -1)
             visit[idx] = False
-    
+
     if (dir == 1):
         tmp = gears[idx].pop()
         gears[idx].insert(0, tmp)
