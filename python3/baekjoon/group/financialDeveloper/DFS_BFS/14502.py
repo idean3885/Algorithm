@@ -1,6 +1,8 @@
 import sys
+import copy
 from collections import deque
 
+# 최대 반복횟수 제한 10만번(이상 넘어가는 경우는 거의 없다. 무한루프 방지용)
 sys.setrecursionlimit(100001)
 
 N, M = map(int, input().split())
@@ -20,14 +22,14 @@ for x in range(N):
 # 바이러스가 이동할 수 있는 방향
 dxy = [(1, 0), (-1, 0), (0, 1), (0, -1)]
 
-# 바이러스 퍼트리기
+# 바이러스 퍼트린 뒤 안전지역 구하기
 def spreadBirus():
-    tscount = scount - 3 # 벽 3개 세워진 만큼 안전지역 빼기
-    visit = [[False] * M for _ in range(N)] # 방문 기록 초기화
+    pmap = copy.deepcopy(map) # 벽이 세워진 맵에 바이러스 퍼트리기 deep copy
+    
+    # 바이러스 퍼트리기
     for vx, vy in vxy:
         tmp = deque()
         tmp.append((vx, vy))
-        visit[vx][vy] = True
         while tmp:
             x, y = tmp.popleft()
             for dx, dy in dxy:
@@ -38,12 +40,18 @@ def spreadBirus():
                 if 0 > mx or mx >= N or 0 > my or my >= M:
                     continue
 
-                if map[mx][my] == 0 and visit[mx][my] == False:
-                    visit[mx][my] = True
+                if pmap[mx][my] == 0:
+                    pmap[mx][my] = 2
                     tmp.append((mx, my))
-                    tscount -= 1
+    
+    # 안전지역 구하기
+    count = 0
+    for x in range(N):
+        for y in range(M):
+            if pmap[x][y] == 0:
+                count += 1
 
-    return tscount # 줄어든 안전지역 크기 전달
+    return count # 안전지역 크기 전달
 
 result = 0 # 안전지역 저장
 
