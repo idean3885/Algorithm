@@ -15,12 +15,9 @@ public class Solution {
         private int x;
         private int y;
 
-        private int dist;
-
-        public Square(int x, int y, int dist) {
+        public Square(int x, int y) {
             this.x = x;
             this.y = y;
-            this.dist = dist;
         }
     }
 
@@ -41,8 +38,7 @@ public class Solution {
     }
 
     public int solution(int[][] maps) {
-        int answer = findMinDist(maps);
-        return answer == 0 ? -1 : answer;
+        return findMinDist(maps);
     }
 
     private int findMinDist(int[][] maps) {
@@ -50,28 +46,27 @@ public class Solution {
         int[] dy = new int[]{0, 0, 1, -1};
 
         Queue<Square> que = new LinkedList<>();
-        que.add(new Square(0, 0, 1));
+        que.add(new Square(0, 0));
 
-        int dist = 0;
-        int mapWidth = maps.length;
-        int mapHeight = maps[0].length;
-        boolean[][] visits = new boolean[mapWidth][mapHeight];
+        int n = maps.length;
+        int m = maps[0].length;
+        int[][] visits = new int[n][m];
         while (!que.isEmpty()) {
             Square square = que.poll();
 
-            if (square.x == mapWidth - 1 && square.y == mapHeight - 1) {
-                return square.dist;
+            if (square.x == n - 1 && square.y == m - 1) {
+                return visits[square.x][square.y] + 1;
             }
 
             for (int i = 0; i < 4; i++) {
                 int mx = square.x + dx[i];
                 int my = square.y + dy[i];
 
-                if (0 > mx || mx >= mapWidth || 0 > my || my >= mapHeight) {
+                if (0 > mx || mx >= n || 0 > my || my >= m) {
                     continue;
                 }
 
-                if (visits[mx][my]) {
+                if (visits[mx][my] > 0) {
                     continue;
                 }
 
@@ -79,12 +74,12 @@ public class Solution {
                     continue;
                 }
 
-                que.add(new Square(mx, my, square.dist + STEP));
-                visits[mx][my] = true;
+                que.add(new Square(mx, my));
+                visits[mx][my] = visits[square.x][square.y] + STEP;
             }
         }
 
-        return dist;
+        return -1;
     }
 
 }
